@@ -1,0 +1,199 @@
+<div class="main">
+  <div class="header">
+    <h3>Students List</h3>
+    <button class="add-btn" (click)="addStudent()">Add Student</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Phone</td>
+        <td>Gender</td>
+        <td>Date de naissance</td>
+        <td>Class</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let s of students">
+        <td>{{ s.name }}</td>
+        <td>{{ s.phone }}</td>
+        <td>{{ s.gender }}</td>
+        <td>{{ s.date }}</td>
+        <td>{{ getClassName(s.classId) }}</td>
+
+        <td>
+          <ng-icon
+            name="heroPencilSquare"
+            class="edit"
+            (click)="editStudent(s)"
+          >
+          </ng-icon>
+
+          <ng-icon
+            name="heroTrash"
+            class="delete"
+            (click)="deleteStudent(s.id)"
+          >
+          </ng-icon>
+
+          <button class="subjects-btn" (click)="openSubjects(s)">Subjects</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================= ADD POPUP ================= -->
+<div *ngIf="isAdding" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="addForm">
+      <h3>Add Student</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="name" />
+        <div *ngIf="isInvalid(addForm, 'name')" style="color: red">
+          Name is required (min 3 characters)
+        </div>
+      </div>
+
+      <div>
+        <label>Phone</label>
+        <input type="text" formControlName="phone" />
+        <div *ngIf="isInvalid(addForm, 'phone')" style="color: red">
+          Phone must be a valid number (ex: 06XXXXXXXX)
+        </div>
+      </div>
+
+      <div>
+        <label>Gender</label>
+        <label
+          ><input type="radio" value="male" formControlName="gender" />
+          Male</label
+        >
+        <label
+          ><input type="radio" value="female" formControlName="gender" />
+          Female</label
+        >
+        <div *ngIf="isInvalid(addForm, 'gender')" style="color: red">
+          Gender is required
+        </div>
+      </div>
+
+      <div>
+        <label>Birth Year</label>
+        <input type="number" formControlName="date" />
+        <div *ngIf="isInvalid(addForm, 'date')" style="color: red">
+          Enter a valid birth year
+        </div>
+      </div>
+
+      <div>
+        <label>Class</label>
+        <select formControlName="classId">
+          <option value="" disabled>-- Select Class --</option>
+          <option *ngFor="let c of classes" [value]="c.id">
+            {{ c.nom }} - {{ c.level }} ({{ c.annee }})
+          </option>
+        </select>
+
+        <div *ngIf="isInvalid(addForm, 'classId')" style="color: red">
+          Class is required
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          type="button"
+          class="save"
+          (click)="addStudent()"
+          [disabled]="addForm.invalid"
+        >
+          Add
+        </button>
+        <button type="button" class="cancel" (click)="cancelAdd()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= EDIT POPUP ================= -->
+<div *ngIf="isEditing" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="modifierForm">
+      <h3>Modify Student {{ modifierForm.get("name")?.value }}</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="name" />
+        <div *ngIf="isInvalid(modifierForm, 'name')" style="color: red">
+          Name is required (min 3 characters)
+        </div>
+      </div>
+
+      <div>
+        <label>Phone</label>
+        <input type="text" formControlName="phone" />
+        <div *ngIf="isInvalid(modifierForm, 'phone')" style="color: red">
+          Phone must be a valid number (ex: 06XXXXXXXX)
+        </div>
+      </div>
+
+      <div>
+        <label>Gender</label>
+        <label
+          ><input type="radio" value="male" formControlName="gender" />
+          Male</label
+        >
+        <label
+          ><input type="radio" value="female" formControlName="gender" />
+          Female</label
+        >
+        <div *ngIf="isInvalid(modifierForm, 'gender')" style="color: red">
+          Gender is required
+        </div>
+      </div>
+
+      <div>
+        <label>Birth Year</label>
+        <input type="number" formControlName="date" />
+        <div *ngIf="isInvalid(modifierForm, 'date')" style="color: red">
+          Enter a valid birth year
+        </div>
+      </div>
+
+      <div>
+        <label>Class</label>
+        <select formControlName="classId">
+          <option value="" disabled>-- Select Class --</option>
+          <option *ngFor="let c of classes" [value]="c.id">
+            {{ c.nom }} - {{ c.level }} ({{ c.annee }})
+          </option>
+        </select>
+
+        <div *ngIf="isInvalid(modifierForm, 'classId')" style="color: red">
+          Class is required
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          type="button"
+          class="save"
+          (click)="editStudent()"
+          [disabled]="modifierForm.invalid"
+        >
+          Save
+        </button>
+        <button type="button" class="cancel" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

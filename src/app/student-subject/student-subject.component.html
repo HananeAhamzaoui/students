@@ -1,0 +1,91 @@
+<!-- ======================= FORM ======================= -->
+<div class="form">
+  <h3>
+    Subjects of <span class="student-name">{{ studentName }}</span>
+  </h3>
+
+  <form [formGroup]="form">
+    <!-- SUBJECT -->
+    <div>
+      <label>Subject</label>
+      <select formControlName="subjectId">
+        <option value="" disabled>-- Select Subject --</option>
+        <option *ngFor="let s of subjects" [value]="s.id">
+          {{ s.name }}
+        </option>
+      </select>
+
+      <div
+        *ngIf="form.get('subjectId')?.touched && form.get('subjectId')?.invalid"
+        class="error"
+      >
+        Subject is required
+      </div>
+    </div>
+
+    <!-- GRADE -->
+    <div>
+      <label>Grade</label>
+      <input type="number" formControlName="grade" />
+
+      <div
+        *ngIf="form.get('grade')?.touched && form.get('grade')?.invalid"
+        class="error"
+      >
+        Grade must be between 0 and 20
+      </div>
+    </div>
+
+    <!-- YEAR -->
+    <div>
+      <label>Year</label>
+      <input type="number" formControlName="annee" />
+
+      <div
+        *ngIf="form.get('annee')?.touched && form.get('annee')?.invalid"
+        class="error"
+      >
+        Year is not valid
+      </div>
+    </div>
+
+    <button type="button" (click)="addGrade()" [disabled]="form.invalid">
+      {{ isEditing ? 'Update Grade' : 'Add Grade' }}
+    </button>
+  </form>
+</div>
+
+<!-- ======================= TABLE ======================= -->
+<div class="main">
+  <table>
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Year</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let ss of studentSubjects; let i = index">
+        <td>{{ getSubjectName(ss.subjectId) }}</td>
+        <td>{{ ss.grade }}</td>
+        <td>{{ ss.annee }}</td>
+        <td>
+          <ng-icon
+            name="heroPencilSquare"
+            class="edit"
+            (click)="editGrade(ss, i)"
+          ></ng-icon>
+
+          <ng-icon
+            name="heroTrash"
+            class="delete"
+            (click)="deleteByIndex(i)"
+          ></ng-icon>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

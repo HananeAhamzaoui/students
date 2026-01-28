@@ -1,0 +1,132 @@
+<div class="main">
+  <div class="header">
+    <h3>Subjects List</h3>
+    <button class="add-btn" (click)="addSubject()">Add Subject</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Semester</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let s of subjects">
+        <td>{{ s.name }}</td>
+        <td>{{ s.description }}</td>
+        <td>{{ s.semester }}</td>
+        <td>
+          <ng-icon
+            name="heroPencilSquare"
+            class="edit"
+            (click)="editSubject(s)"
+          ></ng-icon>
+
+          <ng-icon
+            name="heroTrash"
+            class="delete"
+            (click)="deleteSubject(s.id)"
+          ></ng-icon>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ADD -->
+<div *ngIf="isAdding" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="addForm">
+      <h3>Add Subject</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="name" />
+        <div *ngIf="isInvalid(addForm, 'name')" style="color: red">
+          Name is required (min 3)
+        </div>
+      </div>
+
+      <div>
+        <label>Description</label>
+        <input type="text" formControlName="description" />
+        <div *ngIf="isInvalid(addForm, 'description')" style="color: red">
+          Description is required (min 5)
+        </div>
+      </div>
+
+      <div>
+        <label>Semester</label>
+        <input type="number" formControlName="semester" />
+        <div *ngIf="isInvalid(addForm, 'semester')" style="color: red">
+          Semester must be between 1 and 3
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          class="save"
+          type="button"
+          (click)="addSubject()"
+          [disabled]="addForm.invalid"
+        >
+          Add
+        </button>
+        <button class="cancel" type="button" (click)="cancelAdd()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT -->
+<div *ngIf="isEditing" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="modifierForm">
+      <h3>Edit Subject</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="name" />
+        <div *ngIf="isInvalid(modifierForm, 'name')" style="color: red">
+          Name is required (min 3)
+        </div>
+      </div>
+
+      <div>
+        <label>Description</label>
+        <input type="text" formControlName="description" />
+        <div *ngIf="isInvalid(modifierForm, 'description')" style="color: red">
+          Description is required (min 5)
+        </div>
+      </div>
+
+      <div>
+        <label>Semester</label>
+        <input type="number" formControlName="semester" />
+        <div *ngIf="isInvalid(modifierForm, 'semester')" style="color: red">
+          Semester must be between 1 and 3
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          class="save"
+          type="button"
+          (click)="editSubject()"
+          [disabled]="modifierForm.invalid"
+        >
+          Save
+        </button>
+        <button class="cancel" type="button" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

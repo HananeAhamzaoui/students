@@ -1,0 +1,132 @@
+<div class="main">
+  <div class="header">
+    <h3>Classes List</h3>
+    <button class="add-btn" (click)="addClass()">Add Class</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Level</td>
+        <td>Year</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of classes">
+        <td>{{ c.nom }}</td>
+        <td>{{ c.level }}</td>
+        <td>{{ c.annee }}</td>
+        <td>
+          <ng-icon
+            name="heroPencilSquare"
+            class="edit"
+            (click)="editClass(c)"
+          ></ng-icon>
+
+          <ng-icon
+            name="heroTrash"
+            class="delete"
+            (click)="deleteClass(c.id)"
+          ></ng-icon>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================= ADD POPUP ================= -->
+<div *ngIf="isAdding" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="addForm">
+      <h3>Add Class</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="nom" />
+        <div *ngIf="isInvalid(addForm, 'nom')" style="color: red">
+          Name is required
+        </div>
+      </div>
+
+      <div>
+        <label>Level</label>
+        <input type="text" formControlName="level" />
+        <div *ngIf="isInvalid(addForm, 'level')" style="color: red">
+          Level is required
+        </div>
+      </div>
+
+      <div>
+        <label>Year</label>
+        <input type="number" formControlName="annee" />
+        <div *ngIf="isInvalid(addForm, 'annee')" style="color: red">
+          Enter valid year
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          type="button"
+          class="save"
+          (click)="addClass()"
+          [disabled]="addForm.invalid"
+        >
+          Add
+        </button>
+        <button type="button" class="cancel" (click)="cancelAdd()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= EDIT POPUP ================= -->
+<div *ngIf="isEditing" class="form-overlay">
+  <div class="form">
+    <form [formGroup]="editForm">
+      <h3>Edit Class</h3>
+
+      <div>
+        <label>Name</label>
+        <input type="text" formControlName="nom" />
+        <div *ngIf="isInvalid(editForm, 'nom')" style="color: red">
+          Name is required
+        </div>
+      </div>
+
+      <div>
+        <label>Level</label>
+        <input type="text" formControlName="level" />
+        <div *ngIf="isInvalid(editForm, 'level')" style="color: red">
+          Level is required
+        </div>
+      </div>
+
+      <div>
+        <label>Year</label>
+        <input type="number" formControlName="annee" />
+        <div *ngIf="isInvalid(editForm, 'annee')" style="color: red">
+          Enter valid year
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          type="button"
+          class="save"
+          (click)="editClass()"
+          [disabled]="editForm.invalid"
+        >
+          Save
+        </button>
+        <button type="button" class="cancel" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
